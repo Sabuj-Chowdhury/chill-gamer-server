@@ -35,19 +35,28 @@ async function run() {
         res.send("Failed to add review");
       }
     });
+
     app.get("/top-rated-games", async (req, res) => {
       try {
-        const games = await client
-          .db("gameReviewsDB")
-          .collection("reviews")
+        const database = client.db("gameReviewsDB");
+        const reviewsCollection = database.collection("reviews");
+
+        const games = await reviewsCollection
           .find()
-          .sort({ rating: -1 })
+          .sort({ rating: -1 }) // Sort by rating descending
           .limit(6)
           .toArray();
-        res.send(games);
+
+        console.log("Top rated games fetched:", games); // Log this to debug
+
+        if (games.length > 0) {
+          res.send(games);
+        } else {
+          res.status(404).send({ error: "No top-rated games found" });
+        }
       } catch (error) {
         console.error("Error fetching top-rated games:", error);
-        res.send({ error: "Failed to fetch top-rated games" });
+        res.status(500).json({ error: "Failed to fetch top-rated games" });
       }
     });
 
