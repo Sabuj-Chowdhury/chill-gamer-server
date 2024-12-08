@@ -121,6 +121,27 @@ async function run() {
       }
     });
 
+    app.delete("/reviews/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const database = client.db("gameReviewsDB");
+        const reviewsCollection = database.collection("reviews");
+
+        const result = await reviewsCollection.deleteOne({
+          _id: new ObjectId(id),
+        });
+
+        if (result.deletedCount === 1) {
+          res.json({ message: "Review deleted successfully" });
+        } else {
+          res.json({ error: "Review not found" });
+        }
+      } catch (error) {
+        console.error("Error deleting review:", error);
+        res.json("Failed to delete review");
+      }
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
