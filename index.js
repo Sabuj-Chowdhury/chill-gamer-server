@@ -121,6 +121,38 @@ async function run() {
       }
     });
 
+    app.put("/reviews/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { reviewDescription, rating } = req.body;
+
+        if (!reviewDescription || !rating) {
+          return res.json("Review description and rating are required.");
+        }
+
+        const database = client.db("gameReviewsDB");
+        const reviewsCollection = database.collection("reviews");
+
+        const result = await reviewsCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { reviewDescription, rating } }
+        );
+
+        if (result.matchedCount === 0) {
+          return res.json("Review not found");
+        }
+
+        const updatedReview = await reviewsCollection.findOne({
+          _id: new ObjectId(id),
+        });
+
+        return res.json(updatedReview);
+      } catch (error) {
+        console.error("Error updating review:", error);
+        return res.json("Internal server error");
+      }
+    });
+
     app.delete("/reviews/:id", async (req, res) => {
       try {
         const { id } = req.params;
