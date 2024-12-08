@@ -22,6 +22,20 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    app.post("/add-review", async (req, res) => {
+      try {
+        const review = req.body;
+        const database = client.db("gameReviewsDB");
+        const reviewsCollection = database.collection("reviews");
+
+        const result = await reviewsCollection.insertOne(review);
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.send("Failed to add review");
+      }
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
