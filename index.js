@@ -121,6 +121,35 @@ async function run() {
       }
     });
 
+    app.get("/my-watchlist/:userEmail", async (req, res) => {
+      try {
+        const { userEmail } = req.params;
+        const database = client.db("gameReviewsDB");
+        const watchlistCollection = database.collection("watchlist");
+        const reviewsCollection = database.collection("reviews");
+
+        const userWatchlist = await watchlistCollection
+          .find({ userEmail })
+          .map(async (item) => {
+            const review = await reviewsCollection.findOne({
+              _id: new ObjectId(item.reviewId),
+            });
+            return {
+              ...item,
+              dateAdded: item._id.getTimestamp(),
+              rating: review ? review.rating : "N/A",
+            };
+          })
+          .toArray();
+
+        console.log("User watchlist with ratings: ", userWatchlist);
+        res.json(userWatchlist);
+      } catch (error) {
+        console.error("Error fetching user's watchlist:", error);
+        res.status(500).json({ error: "Failed to fetch watchlist" });
+      }
+    });
+
     app.put("/reviews/:id", async (req, res) => {
       try {
         const { id } = req.params;
