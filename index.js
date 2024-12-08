@@ -56,13 +56,29 @@ async function run() {
         const reviews = await client
           .db("gameReviewsDB")
           .collection("reviews")
-          .find() // Fetch all reviews
+          .find()
           .toArray();
 
-        res.status(200).send(reviews); // Send all reviews to the client
+        res.send(reviews);
       } catch (error) {
         console.error("Error fetching all reviews:", error);
-        res.status(500).send({ error: "Failed to fetch reviews" });
+        res.send("Failed to fetch reviews");
+      }
+    });
+
+    app.get("/my-reviews/:userEmail", async (req, res) => {
+      try {
+        const userEmail = req.params.userEmail;
+        const database = client.db("gameReviewsDB");
+        const reviewsCollection = database.collection("reviews");
+
+        const userReviews = await reviewsCollection
+          .find({ userEmail })
+          .toArray();
+        res.json(userReviews);
+      } catch (error) {
+        console.error("Error fetching user's reviews:", error);
+        res.json("Failed to fetch reviews");
       }
     });
 
@@ -71,19 +87,18 @@ async function run() {
         const reviewId = req.params.id;
         const database = client.db("gameReviewsDB");
 
-        // Convert the id to an ObjectId
         const review = await database
           .collection("reviews")
           .findOne({ _id: new ObjectId(reviewId) });
 
         if (review) {
-          res.status(200).json(review);
+          res.json(review);
         } else {
-          res.status(404).json({ error: "Review not found" });
+          res.json({ error: "Review not found" });
         }
       } catch (error) {
         console.error("Error fetching review details:", error);
-        res.status(500).json({ error: "Failed to fetch review" });
+        res.json("Failed to fetch review");
       }
     });
 
@@ -99,10 +114,10 @@ async function run() {
           userEmail,
           userName,
         });
-        res.status(200).send(result);
+        res.send(result);
       } catch (error) {
         console.error("Failed to save data to watchlist:", error);
-        res.status(500).send({ error: "Failed to add to watchlist" });
+        res.send("Failed to add to watchlist");
       }
     });
 
