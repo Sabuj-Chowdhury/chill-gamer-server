@@ -51,6 +51,21 @@ async function run() {
       }
     });
 
+    app.get("/all-reviews", async (req, res) => {
+      try {
+        const reviews = await client
+          .db("gameReviewsDB")
+          .collection("reviews")
+          .find() // Fetch all reviews
+          .toArray();
+
+        res.status(200).send(reviews); // Send all reviews to the client
+      } catch (error) {
+        console.error("Error fetching all reviews:", error);
+        res.status(500).send({ error: "Failed to fetch reviews" });
+      }
+    });
+
     app.get("/reviews/:id", async (req, res) => {
       try {
         const reviewId = req.params.id;
@@ -84,7 +99,6 @@ async function run() {
           userEmail,
           userName,
         });
-
         res.status(200).send(result);
       } catch (error) {
         console.error("Failed to save data to watchlist:", error);
