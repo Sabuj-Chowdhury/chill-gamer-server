@@ -31,7 +31,6 @@ async function run() {
         const result = await reviewsCollection.insertOne(review);
         res.send(result);
       } catch (error) {
-        console.error(error);
         res.send("Failed to add review");
       }
     });
@@ -43,20 +42,17 @@ async function run() {
 
         const games = await reviewsCollection
           .find()
-          .sort({ rating: -1 }) // Sort by rating descending
+          .sort({ rating: -1 })
           .limit(6)
           .toArray();
-
-        console.log("Top rated games fetched:", games); // Log this to debug
 
         if (games.length > 0) {
           res.send(games);
         } else {
-          res.status(404).send({ error: "No top-rated games found" });
+          res.send({ error: "No top-rated games found" });
         }
       } catch (error) {
-        console.error("Error fetching top-rated games:", error);
-        res.status(500).json({ error: "Failed to fetch top-rated games" });
+        res.json({ error: "Failed to fetch top-rated games" });
       }
     });
 
@@ -86,7 +82,6 @@ async function run() {
           .toArray();
         res.json(userReviews);
       } catch (error) {
-        console.error("Error fetching user's reviews:", error);
         res.json("Failed to fetch reviews");
       }
     });
@@ -106,7 +101,6 @@ async function run() {
           res.json({ error: "Review not found" });
         }
       } catch (error) {
-        console.error("Error fetching review details:", error);
         res.json("Failed to fetch review");
       }
     });
@@ -125,7 +119,6 @@ async function run() {
         });
         res.send(result);
       } catch (error) {
-        console.error("Failed to save data to watchlist:", error);
         res.send("Failed to add to watchlist");
       }
     });
@@ -151,11 +144,9 @@ async function run() {
           })
           .toArray();
 
-        console.log("User watchlist with ratings: ", userWatchlist);
         res.json(userWatchlist);
       } catch (error) {
-        console.error("Error fetching user's watchlist:", error);
-        res.status(500).json({ error: "Failed to fetch watchlist" });
+        res.json({ error: "Failed to fetch watchlist" });
       }
     });
 
@@ -186,7 +177,6 @@ async function run() {
 
         return res.json(updatedReview);
       } catch (error) {
-        console.error("Error updating review:", error);
         return res.json("Internal server error");
       }
     });
@@ -207,7 +197,6 @@ async function run() {
           res.json({ error: "Review not found" });
         }
       } catch (error) {
-        console.error("Error deleting review:", error);
         res.json("Failed to delete review");
       }
     });
