@@ -30,160 +30,54 @@ Base URL: `http://localhost:5000` ()
 **POST** `/add-review`
 
 - **Description:** Add a new game review.
-- **Request Body:**
-  ```json
-  {
-    "userEmail": "example@gmail.com",
-    "gameTitle": "Game Name",
-    "reviewDescription": "Amazing gameplay and graphics!",
-    "rating": 5
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "acknowledged": true,
-    "insertedId": "<newly created review ID>"
-  }
-  ```
 
 ### 🌟 **Get Top-Rated Games**
 
 **GET** `/top-rated-games`
 
 - **Description:** Retrieves the top 6 highest-rated games.
-- **Response:**
-  ```json
-  [
-    {
-      "_id": "<game ID>",
-      "gameTitle": "Game Name",
-      "rating": 5
-    }
-  ]
-  ```
 
 ### 🔄 **Get All Reviews**
 
 **GET** `/all-reviews`
 
 - **Description:** Fetches all game reviews.
-- **Response:**
-  ```json
-  [
-    {
-      "_id": "<review ID>",
-      "userEmail": "example@gmail.com",
-      "gameTitle": "Game Name",
-      "reviewDescription": "Great game!",
-      "rating": 5
-    }
-  ]
-  ```
 
 ### 🔍 **Get Reviews by User**
 
 **GET** `/my-reviews/:userEmail`
 
 - **Description:** Retrieves all reviews created by a specific user.
-- **Response:**
-  ```json
-  [
-    {
-      "_id": "<review ID>",
-      "gameTitle": "Game Name",
-      "reviewDescription": "Awesome experience!",
-      "rating": 5
-    }
-  ]
-  ```
 
 ### ℹ️ **Get Review Details**
 
 **GET** `/reviews/:id`
 
 - **Description:** Fetches detailed information for a single review.
-- **Response:**
-  ```json
-  {
-    "_id": "<review ID>",
-    "gameTitle": "Game Name",
-    "reviewDescription": "Fantastic gameplay!",
-    "rating": 5
-  }
-  ```
 
 ### 🎮 **Add to Watchlist**
 
 **POST** `/watchlist`
 
 - **Description:** Adds a game to the user’s watchlist.
-- **Request Body:**
-  ```json
-  {
-    "reviewId": "<review ID>",
-    "gameTitle": "Game Name",
-    "userEmail": "example@gmail.com",
-    "userName": "John Doe"
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "acknowledged": true,
-    "insertedId": "<newly created watchlist item ID>"
-  }
-  ```
 
 ### 🔎 **Get Watchlist by User**
 
 **GET** `/my-watchlist/:userEmail`
 
 - **Description:** Retrieves the watchlist for a specific user.
-- **Response:**
-  ```json
-  [
-    {
-      "reviewId": "<review ID>",
-      "gameTitle": "Game Name",
-      "dateAdded": "2025-01-08T15:00:00.000Z",
-      "rating": 5
-    }
-  ]
-  ```
 
 ### 🗓 **Update Review**
 
 **PUT** `/reviews/:id`
 
 - **Description:** Updates an existing review.
-- **Request Body:**
-  ```json
-  {
-    "reviewDescription": "Updated description",
-    "rating": 4
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "_id": "<review ID>",
-    "reviewDescription": "Updated description",
-    "rating": 4
-  }
-  ```
 
 ### ❌ **Delete Review**
 
 **DELETE** `/reviews/:id`
 
 - **Description:** Deletes a review by its ID.
-- **Response:**
-  ```json
-  {
-    "message": "Review deleted successfully"
-  }
-  ```
 
 ---
 
